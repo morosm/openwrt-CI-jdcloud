@@ -22,7 +22,12 @@ Mentally map which packages need to change from `=y` to `=m` based strictly on s
 **Exceptions/Removals**:
 - Explicitly completely remove any existing `CONFIG_PACKAGE_luci-app-zerotier` and `CONFIG_PACKAGE_luci-i18n-zerotier-zh-cn` from the file before changing the rest.
 
-### Step 3: Append Modern Packages
+### Step 3: Target Device Filter
+**CRITICAL**: Remove all `CONFIG_TARGET_DEVICE_...=y` definitions and their associated packages (e.g., `CONFIG_TARGET_DEVICE_PACKAGES_...`) from the file, **EXCEPT** for exactly the following device:
+`CONFIG_TARGET_DEVICE_qualcommax_ipq60xx_DEVICE_jdcloud_re-ss-01=y`
+Only this single device definition should remain.
+
+### Step 4: Append Modern Packages
 At the very end of the `.config` file, append the following block exactly:
 ```text
 # My Packages
@@ -35,5 +40,5 @@ CONFIG_PACKAGE_luci-app-diskman=y
 # End of my packages
 ```
 
-### Step 4: Execute Text Replacements
+### Step 5: Execute Text Replacements
 Use the `multi_replace_file_content` tool to perform all the `=y` to `=m` replacements, the two line removals, and the final append operation in a single efficient pass. Be extremely careful to match the exact spacing and line formatting!
